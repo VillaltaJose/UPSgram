@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:upsgram/core/widgets/button_navbar.dart';
 
-class FeedPage extends StatelessWidget {
-  const FeedPage({super.key});
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("UPSgram"),
+        title: const Text("Perfil"),
         centerTitle: true,
       ),
       body: const Center(
         child: Text(
-          'Bienvenido a UPSgram!',
-          style: TextStyle(fontSize: 20),
+          'Perfil del usuario.',
+          style: TextStyle(fontSize: 18),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 0),
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 2),
     );
   }
 }
