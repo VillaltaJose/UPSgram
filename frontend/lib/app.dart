@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:upsgram/features/feed/presentation/feed_page.dart';
 
 final _router = GoRouter(
   initialLocation: '/feed',
   routes: [
     GoRoute(
       path: '/feed',
+      builder:(context, state) => const FeedPage(),
     ),
   ],
 );
