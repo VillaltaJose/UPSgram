@@ -1,0 +1,60 @@
+import '../domain/post_model.dart';
+
+final List<PostModel> mockPosts = [
+  PostModel(
+    username: 'Daniel Collaguazo',
+    avatarUrl: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
+    imageUrl: 'https://picsum.photos/500/500?random=1',
+    description: 'Primer post de prueba',
+    likes: 120,
+    comments: 15,
+  ),
+  PostModel(
+    username: 'Daniel Collaguazo',
+    avatarUrl: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
+    imageUrl: 'https://picsum.photos/500/500?random=2',
+    description: 'Esta es una descripcion',
+    likes: 210,
+    comments: 32,
+  ),
+  PostModel(
+    username: 'Anthony Moya',
+    avatarUrl: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
+    imageUrl: 'https://picsum.photos/500/500?random=3',
+    description: 'Esta es una descripcion',
+    likes: 210,
+    comments: 32,
+  ),
+  PostModel(
+    username: 'Anthony Moya',
+    avatarUrl: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
+    imageUrl: 'https://picsum.photos/500/500?random=3',
+    description: 'Esta es una descripcion',
+    likes: 210,
+    comments: 32,
+  ),
+  PostModel(
+    username: 'Anthony Moya',
+    avatarUrl: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
+    imageUrl: 'https://picsum.photos/500/500?random=3',
+    description: 'Esta es una descripcion',
+    likes: 210,
+    comments: 32,
+  ),
+  PostModel(
+    username: 'Anthony Moya',
+    avatarUrl: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
+    imageUrl: 'https://picsum.photos/500/500?random=3',
+    description: 'Esta es una descripcion',
+    likes: 210,
+    comments: 32,
+  ),
+  PostModel(
+    username: 'Anthony Moya',
+    avatarUrl: 'https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg',
+    imageUrl: 'https://picsum.photos/500/500?random=3',
+    description: 'Esta es una descripcion',
+    likes: 210,
+    comments: 32,
+  ),
+];
