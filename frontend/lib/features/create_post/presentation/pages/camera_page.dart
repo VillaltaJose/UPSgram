@@ -97,11 +97,7 @@ class _CameraPageState extends State<CameraPage> {
   void _openGallery() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image != null && mounted) {
-      Navigator.pushNamed(
-        context,
-        '/post/confirm',
-        arguments: File(image.path),
-      );
+      GoRouter.of(context).push('/post/confirm', extra: File(image.path));
     }
   }
 
@@ -111,10 +107,12 @@ class _CameraPageState extends State<CameraPage> {
     try {
       final file = await _cameraController!.takePicture();
       if (mounted) {
-        Navigator.pushNamed(
-          context,
+        GoRouter.of(context).push(
           '/post/confirm',
-          arguments: File(file.path),
+          extra: {
+            'file': File(file.path),
+            'isFrontCamera': !_isRearCameraSelected,
+          },
         );
       }
     } catch (e) {
