@@ -74,7 +74,10 @@ class _ConfirmPageState extends State<ConfirmPage> {
                 icon: const Icon(Icons.arrow_forward),
                 label: const Text('Siguiente'),
                 onPressed: () {
-                  
+                  GoRouter.of(context).push('/post/publish', extra: {
+                    'image': File(widget.image.path),
+                    'filter': _selectedFilter.name,
+                  });
                 },
               ),
             ],
