@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CameraPage extends StatefulWidget {
@@ -105,7 +106,8 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _capturePhoto() async {
-    if (_cameraController == null || !_cameraController!.value.isInitialized) return;
+    if (_cameraController == null || !_cameraController!.value.isInitialized)
+      return;
     try {
       final file = await _cameraController!.takePicture();
       if (mounted) {
@@ -173,7 +175,13 @@ class _CameraPageState extends State<CameraPage> {
             left: 16,
             child: IconButton(
               icon: const Icon(Icons.close, color: Colors.white, size: 30),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                if (GoRouter.of(context).canPop()) {
+                  GoRouter.of(context).pop();
+                } else {
+                  GoRouter.of(context).go('/feed');
+                }
+              },
             ),
           ),
           Positioned(
