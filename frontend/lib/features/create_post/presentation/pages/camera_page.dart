@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,9 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   late List<CameraDescription> _cameras;
   CameraController? _cameraController;
-  bool _isRearCameraSelected = true;
+  bool _isRearCameraSelected = false;
   bool _isCameraInitialized = false;
+  bool _isSwitchingCamera = false;
 
   @override
   void initState() {
@@ -25,43 +27,70 @@ class _CameraPageState extends State<CameraPage> {
 
   Future<void> _initCamera() async {
     _cameras = await availableCameras();
-    _startCamera(
-      _cameras.firstWhere(
-        (camera) => camera.lensDirection == CameraLensDirection.back,
-      ),
+    final frontCamera = _cameras.firstWhere(
+      (camera) => camera.lensDirection == CameraLensDirection.front,
     );
+    _isRearCameraSelected = false;
+    _startCamera(frontCamera);
   }
 
   void _startCamera(CameraDescription cameraDescription) async {
-    _cameraController = CameraController(
-      cameraDescription,
-      ResolutionPreset.ultraHigh,
-      enableAudio: false,
-    );
-
-    await _cameraController!.initialize();
-    if (mounted) {
-      setState(() {
-        _isCameraInitialized = true;
-      });
+    try {
+      _cameraController = CameraController(
+        cameraDescription,
+        ResolutionPreset.medium,
+        enableAudio: false,
+      );
+      await _cameraController!.initialize();
+      if (mounted) {
+        setState(() => _isCameraInitialized = true);
+      }
+    } catch (e) {
+      debugPrint('Error al iniciar la cámara: $e');
     }
   }
 
-  void _switchCamera() {
-    final newDirection =
-        _isRearCameraSelected
-            ? CameraLensDirection.front
-            : CameraLensDirection.back;
-    final newCamera = _cameras.firstWhere(
-      (camera) => camera.lensDirection == newDirection,
-    );
+  Future<void> _switchCamera() async {
+    if (_isSwitchingCamera || _cameras.isEmpty) return;
 
     setState(() {
-      _isRearCameraSelected = !_isRearCameraSelected;
+      _isSwitchingCamera = true;
       _isCameraInitialized = false;
     });
 
-    _startCamera(newCamera);
+    try {
+      final newLensDirection =
+          _isRearCameraSelected
+              ? CameraLensDirection.front
+              : CameraLensDirection.back;
+
+      final newCamera = _cameras.firstWhere(
+        (camera) => camera.lensDirection == newLensDirection,
+      );
+
+      await _cameraController?.dispose();
+
+      _cameraController = CameraController(
+        newCamera,
+        ResolutionPreset.medium,
+        enableAudio: false,
+      );
+
+      await _cameraController!.initialize();
+
+      if (mounted) {
+        setState(() {
+          _isRearCameraSelected = !_isRearCameraSelected;
+          _isCameraInitialized = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error al cambiar de cámara: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isSwitchingCamera = false);
+      }
+    }
   }
 
   void _openGallery() async {
@@ -76,10 +105,18 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   void _capturePhoto() async {
-    if (!_cameraController!.value.isInitialized) return;
-    final file = await _cameraController!.takePicture();
-    if (mounted) {
-      Navigator.pushNamed(context, '/post/confirm', arguments: File(file.path));
+    if (_cameraController == null || !_cameraController!.value.isInitialized) return;
+    try {
+      final file = await _cameraController!.takePicture();
+      if (mounted) {
+        Navigator.pushNamed(
+          context,
+          '/post/confirm',
+          arguments: File(file.path),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error al capturar la foto: $e');
     }
   }
 
@@ -113,7 +150,16 @@ class _CameraPageState extends State<CameraPage> {
                               containerHeight *
                               _cameraController!.value.aspectRatio,
                           maxHeight: containerHeight,
-                          child: CameraPreview(_cameraController!),
+                          child:
+                              _isRearCameraSelected
+                                  ? CameraPreview(_cameraController!)
+                                  : Transform(
+                                    alignment: Alignment.center,
+                                    transform:
+                                        Matrix4.identity()
+                                          ..scale(-1.0, 1.0, 1.0),
+                                    child: CameraPreview(_cameraController!),
+                                  ),
                         ),
                       ),
                     );
