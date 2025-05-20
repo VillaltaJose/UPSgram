@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:upsgram/features/create_post/presentation/create_post_page.dart';
+import 'package:upsgram/features/create_post/presentation/pages/camera_page.dart';
 import 'package:upsgram/features/feed/presentation/feed_page.dart';
 import 'package:upsgram/features/profile/presentation/profile_page.dart';
 
@@ -13,7 +14,7 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/create',
-      builder: (context, state) => const CreatePostPage(),
+      builder: (context, state) => const CameraPage(),
     ),
     GoRoute(
       path: '/profile',
